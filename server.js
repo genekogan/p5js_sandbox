@@ -5,7 +5,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongodb = require('mongodb');
 
-var uri = 'mongodb://heroku_app37049842:dolsgo69sgqu0kupj60kklues5@ds053310.mongolab.com:53310/heroku_app37049842';
+var uri = process.env.p5jsSandboxHeroku;
 
 var saveSketch = function(codeText, thumbnail) {
   mongodb.MongoClient.connect(uri, function(err, db) {
@@ -82,17 +82,17 @@ app.get('/browse', function(request, response) {
 });
 
 io.on('connection', function (socket) {
-  	socket.on('saveSketch', function (data) {
-  		saveSketch(data.codeText, data.thumb);
-  	});
-  	socket.on('browseSketches', function (data) {
-  		sendSketchesData(socket);
-  	});
-  	socket.on('requestSketch', function (data) {
-    	sendSketchToClient(socket, data._id);
-  	});
+    socket.on('saveSketch', function (data) {
+      saveSketch(data.codeText, data.thumb);
+    });
+    socket.on('browseSketches', function (data) {
+      sendSketchesData(socket);
+    });
+    socket.on('requestSketch', function (data) {
+      sendSketchToClient(socket, data._id);
+    });
     socket.on('requestRandomSketch', function () {
-      	sendRandomSketchToClient(socket);
+        sendRandomSketchToClient(socket);
     });
 });
 
@@ -101,7 +101,7 @@ console.log("node running on port "+(process.env.PORT || 5000));
 /*
 // for deleting the sketches table
 mongodb.MongoClient.connect(uri, function(err, db) {
-  	if(err) throw err;
-  	db.collection('sketches').drop();
+    if(err) throw err;
+    db.collection('sketches').drop();
 });
 */
